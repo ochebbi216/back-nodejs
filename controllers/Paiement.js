@@ -14,10 +14,10 @@ exports.create = async (req, res) => {
     const savedPaiement = await paiementToSave.save(); // Use await for async/await
 
     console.log("The new Paiement is:", savedPaiement);
-    res.status(201).json(savedPaiement); // Use 201 for created resources
+    res.json({success: true, msg: "Paiement are added now."});
   } catch (error) {
     console.error("Error creating Paiement:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.json({success: false,error:error, msg: "Paiement are not added."});
   }
 };
 
@@ -71,10 +71,10 @@ exports.update = async (req, res) => {
     }
 
     console.log(`Paiement ${id} is updated:`, updatedPaiement);
-    res.json(updatedPaiement);
+    res.json({success:true,msj:"client updated"});
   } catch (error) {
     console.error("Error updating Paiement:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({success:false, error:"Internal server error"});
   }
 };
 

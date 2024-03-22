@@ -4,15 +4,15 @@ const schema = new mongoose.Schema({
   type: {
     type: String,
     required: true,
-    enum: ['vente', 'location'],
+    enum: ['vente', 'location','surplan'],
   },
   date_debut: {
     type: Date,
-    required: true,
+    required: false,
   },
   date_fin: {
     type: Date,
-    required: true,
+    required: false,
   },
   montant_total: {
     type: Number,
@@ -20,18 +20,24 @@ const schema = new mongoose.Schema({
   },
   avance: {
     type: Number,
-    required: true,
+    required: false,
   },
   appartement_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Appartement',
     required: true,
   },
+  
   utilisateur_id: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Utilisateur',
     required: true,
   },
+
+  date : {
+    type: Date,
+    default:Date.now,
+},
 });
 
 module.exports = mongoose.model('Contrat', schema);

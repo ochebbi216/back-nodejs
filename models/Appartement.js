@@ -32,7 +32,7 @@ const schema = new mongoose.Schema({
   statut: {
     type: String,
     required: true,
-    enum: ['disponible', 'vendu', 'réservé'],
+    enum: ['disponible', 'vendu', 'réservé','loué'],
   },
   immeuble_id: {
     type: mongoose.Schema.Types.ObjectId,

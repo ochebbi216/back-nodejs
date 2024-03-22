@@ -14,10 +14,10 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  type: {
+  cin: {
     type: String,
     required: true,
-    enum: ['acheteur', 'locataire'],
+    unique:true
   },
 });
 

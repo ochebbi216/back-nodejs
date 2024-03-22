@@ -1,23 +1,47 @@
-const Contrat = require('../models/Contrat'); // Assuming correct path
-const { validationResult } = require('express-validator'); // For data validation
+const Contrat = require('../models/Contrat'); // Chemin d'accès correct
+const Appartement = require('../models/Appartement'); // Ajout de cette ligne pour utiliser le modèle Appartement
+const { validationResult } = require('express-validator');
+
+async function updateStatutAppartement(appartementId, typeContrat) {
+  try {
+    let statut;
+    switch (typeContrat) {
+      case 'vente':
+        statut = 'vendu';
+        break;
+      case 'location':
+        statut = 'loué';
+        break;
+      case 'surplan':
+        statut = 'réservé';
+        break;
+      default:
+        statut = 'disponible';
+    }
+
+    await Appartement.findByIdAndUpdate(appartementId, { statut: statut });
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du statut de l'appartement:", error);
+    throw error;
+  }
+}
+
 
 exports.create = async (req, res) => {
   try {
-    // Validate data using express-validator (customize rules as needed)
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const { body } = req; // Destructure data from request
-    const contratToSave = new Contrat(body);
-    const savedContrat = await contratToSave.save(); // Use await for async/await
-
+    const contratToSave = new Contrat(req.body);
+    const savedContrat = await contratToSave.save();
+    await updateStatutAppartement(savedContrat.appartement_id, savedContrat.type); // Correction ici
     console.log("The new Contrat is:", savedContrat);
-    res.status(201).json(savedContrat); // Use 201 for created resources
+    res.json({ success: true, msg: "Contrat added successfully." }); // Correction ici
   } catch (error) {
     console.error("Error creating Contrat:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ success: false, msg: "Contrat was not added." }); // Correction ici
   }
 };
 
@@ -56,25 +80,25 @@ exports.update = async (req, res) => {
     const { id } = req.params;
     const { body } = req;
 
-    // Validate data using express-validator (customize rules as needed)
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
     }
 
-    const updatedContrat = await Contrat.findOneAndUpdate({ _id: id }, body, {
-      new: true, // Return updated document
-    }).lean(); // Use lean for performance
+    const updatedContrat = await Contrat.findOneAndUpdate({ _id: id }, body, { new: true }).lean();
 
     if (!updatedContrat) {
       return res.status(404).json({ error: "Contrat not found" });
     }
+    
+    // Mise à jour du statut de l'appartement si nécessaire, en fonction de la logique métier
+    await updateStatutAppartement(updatedContrat.appartement_id, updatedContrat.type);
 
     console.log(`Contrat ${id} is updated:`, updatedContrat);
-    res.json(updatedContrat);
+    res.json({ success: true, msg: "Contrat updated successfully." }); // Correction ici
   } catch (error) {
     console.error("Error updating Contrat:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.status(500).json({ success: false, error: "Internal server error" }); // Uniformisation ici
   }
 };
 

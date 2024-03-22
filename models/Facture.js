@@ -5,14 +5,6 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  date: {
-    type: Date,
-    required: true,
-  },
-  montant: {
-    type: Number,
-    required: true,
-  },
   periode: {
     type: String,
     required: true,
@@ -22,6 +14,10 @@ const schema = new mongoose.Schema({
     ref: 'Paiement',
     required: true,
   },
+  date : {
+    type: Date,
+    default:Date.now,
+},
 });
 
 module.exports = mongoose.model('Facture', schema);

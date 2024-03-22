@@ -14,10 +14,10 @@ exports.create = async (req, res) => {
     const savedFacture = await factureToSave.save(); // Use await for async/await
 
     console.log("The new Facture is:", savedFacture);
-    res.status(201).json(savedFacture); // Use 201 for created resources
+    res.json({success: true, msg: "Facture are added now.",facture:savedFacture });
   } catch (error) {
     console.error("Error creating Facture:", error);
-    res.status(500).json({ error: "Internal server error" });
+    res.json({success: false, error:error });
   }
 };
 

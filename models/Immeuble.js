@@ -5,6 +5,14 @@ const schema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  long:{
+    type: Number,
+    required: true,
+  },
+  larg:{
+    type: Number,
+    required: true,
+  },
   adresse: {
     type: String,
     required: true,
