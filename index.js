@@ -6,7 +6,7 @@ const passport = require ("passport");
 
 
 // mongoose.set('strictQuery', false);
-mongoose.connect('mongodb://localhost:27017/gestion_immobiliere'
+mongoose.connect("mongodb+srv://gang_of_2:gang_2@cluster0.omlg9.mongodb.net/gestion_immobiliere"
 , { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.on('connected', ()=>{
     console.log("connected to database ^_^ " );
